@@ -1,25 +1,25 @@
 # 📈 Sistema de Inversiones y Rendimientos Diarios
 
-Sistema backend desarrollado en **Java y SQL Server** diseñado para simular la gestión de inversiones financieras, colocación de plazos fijos, cuentas remuneradas y cálculo automático de rendimientos diarios.
+Sistema backend desarrollado en **Java y SQL Server** diseñado para simular la gestión de inversiones financieras, colocación de plazos fijos, fondos comunes y el seguimiento de saldos y transacciones.
 
-Este proyecto está enfocado en aplicar desarrollo en capas, manejo preciso de operaciones financieras con `BigDecimal`, integración mediante **JDBC** (consultas parametrizadas y ejecución de Stored Procedures) y control de versiones con Git.
+Este proyecto está enfocado en aplicar Programación Orientada a Objetos avanzada (Herencia y Polimorfismo), integración mediante **JDBC** con arquitectura limpia y un uso intensivo de **T-SQL** para analítica y lógica de base de datos.
 
 ---
 
 ## 🎯 Funcionalidades Principales
 
 ### 💰 Gestión de Plazos Fijos
-* Constituir plazos fijos especificando monto, plazo (días) y Tasa Nominal Anual (TNA).
-* Simulación previa de rendimientos finales e intereses a percibir.
-* Cancelación anticipada y acreditación automática al vencimiento.
+* Constituir plazos fijos vinculados a clientes, registrando monto, días y Tasa Nominal Anual (TNA).
+* Cálculo polimórfico de ganancias basadas en la fórmula de interés según los días estipulados.
 
-### 📊 Cuentas Remuneradas y Rendimientos Diarios
-* Cálculo y acreditación diaria de intereses sobre saldo disponible mediante Stored Procedures.
-* Historial de rendimientos acumulados por cliente.
+### 📊 Simulación de Rendimientos vía Base de Datos
+* Simulación de proyecciones finales e intereses a percibir mediante la ejecución de Procedimientos Almacenados (`sp_SimularPlazoFijo`) directamente en SQL Server.
 
 ### 📈 Fondos Comunes de Inversión (FCI)
-* Suscripción y rescate de cuotapartes.
-* Variación diaria de valor de cuotaparte y cálculo de tenencias.
+* Cálculo dinámico de ganancias mediante el seguimiento del valor de cuotaparte inicial y actual.
+
+### 🗄️ Auditoría de Transacciones y Saldos
+* Registro histórico de operaciones de depósitos y retiros por cliente para control de auditoría.
 
 ---
 
@@ -27,24 +27,21 @@ Este proyecto está enfocado en aplicar desarrollo en capas, manejo preciso de o
 
 * **Lenguaje:** Java 17+ (Core / SE)
 * **Base de Datos:** SQL Server (T-SQL)
-* **Acceso a Datos:** JDBC (`PreparedStatement`, `CallableStatement`, `DriverManager`)
 * **Control de Versiones:** Git & GitHub
 
 ---
 
 ## 🗄️ Conceptos Técnicos Aplicados
 
-* **SQL Server & T-SQL:**
-  * Procedimientos Almacenados (*Stored Procedures*) para procesos batch de cierres diarios y acreditación de rendimientos.
-  * Transacciones complejas (`BEGIN TRANSACTION`, `COMMIT`, `ROLLBACK`) para asegurar consistencia ACID.
-  * Funciones de Ventana (`ROW_NUMBER()`, `SUM() OVER(...)`) para reportes y extractos consolidados.
-  * Manejo defensivo de errores con bloques `TRY...CATCH`.
+* **SQL Server & T-SQL (Lógica de Datos Avanzada):**
+  * **Procedimientos Almacenados:** Implementación de `sp_SimularPlazoFijo` para delegar cálculos matemáticos de proyecciones a la base de datos.
+  * **Funciones de Ventana (`OVER`):** Uso de `ROW_NUMBER()`, `RANK()` y `DENSE_RANK()` para rankear las inversiones de los clientes, y `SUM() OVER(...)` para calcular saldos históricos acumulados transacción por transacción.
+  * **Analítica Temporal:** Aplicación de la función `LAG()` para calcular la variación económica exacta entre un plazo fijo y el inmediato anterior de un mismo cliente.
 
-* **Java & Backend:**
-  * Programación Orientada a Objetos (POO), encapsulamiento y arquitectura modular por capas.
-  * Manejo de precisión monetaria utilizando `BigDecimal` y `RoundingMode.HALF_UP`.
-  * Patrón de diseño **DAO (Data Access Object)** para desacoplar la base de datos de la lógica de negocio.
-  * Manejo de excepciones personalizadas (`SQLException` wrapper) y gestión de conexiones.
+* **Java & Backend (Arquitectura y POO):**
+  * **Clases Abstractas y Polimorfismo:** Creación de una entidad base `Inversion` con un método abstracto `calcularGanancia()`, permitiendo que el portafolio del cliente procese dinámicamente Plazos Fijos o FCIs en una misma colección.
+  * **Encapsulamiento:** Estricto control de acceso a atributos mediante modificadores `private` y validación defensiva en métodos mutadores (Setters).
+  * **Estructura Modular:** Desacoplamiento de responsabilidades dividiendo el dominio del negocio (`model`) de la ejecución principal del sistema (`app`).
 
 ---
 
@@ -53,17 +50,14 @@ Este proyecto está enfocado en aplicar desarrollo en capas, manejo preciso de o
 ```text
 sistema-inversiones/
 │
-├── README.md
 ├── database/
-│   ├── schema.sql              # Definición de tablas, PK/FK y constraints
-│   ├── stored_procedures.sql   # SPs para cierres, cálculo TNA y acreditaciones
-│   └── seed_data.sql           # Datos iniciales para pruebas
+│   ├── schema_and_data.sql     # Definición de tablas (Clientes, PlazosFijos, Transacciones), FKs e inserts de prueba
+│   └── stored_procedures.sql   # SP para simulación de cálculos financieros
 │
 └── src/
     └── com/
+        ├── app/
+        │   └── Main.java       # Punto de entrada, armado de portafolio y prueba polimórfica
         └── inversiones/
-            ├── config/         # Conexión JDBC (DatabaseConnection.java)
-            ├── model/          # Entidades de dominio (Cliente, PlazoFijo, Cuenta)
-            ├── dao/            # Interfaces e implementaciones JDBC (ClienteDAO, PlazoFijoDAO)
-            ├── service/        # Reglas de negocio y fórmulas de tasas
-            └── app/            # Aplicación de consola / Menú interactivo
+            └── model/          # Clases de dominio, herencia y lógica de ganancias
+```
