@@ -2,7 +2,7 @@
 
 Sistema backend desarrollado en **Java y SQL Server** diseñado para simular la gestión de inversiones financieras, colocación de plazos fijos, fondos comunes y el seguimiento de saldos y transacciones.
 
-Este proyecto está enfocado en aplicar Programación Orientada a Objetos avanzada (Herencia y Polimorfismo), integración mediante **JDBC** con arquitectura limpia y un uso intensivo de **T-SQL** para analítica y lógica de base de datos.
+Este proyecto está enfocado en aplicar Programación Orientada a Objetos avanzada (Herencia y Polimorfismo),uso intensivo de **T-SQL** para analítica y lógica de base de datos.
 
 ---
 
