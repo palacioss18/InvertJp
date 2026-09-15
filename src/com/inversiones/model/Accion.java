@@ -8,8 +8,8 @@ public class Accion extends Inversion{
 	private double precioActual;
 
 	//CONSTRUCTOR
-	public Accion(double monto,int dias,String nombre,double cantidad,double precioCompra,precioActual){
-	super.(monto,dias);
+	public Accion(double monto, int dias, String nombre, double cantidad, double precioCompra, double precioActual) {
+        super(monto,dias);
 	this.nombre = nombre;
 	this.cantidad = cantidad;
 	this.precioCompra = precioCompra;
