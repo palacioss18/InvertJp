@@ -36,7 +36,7 @@ CREATE TABLE PlazosFijos (
 
 GO
 
--- 1. Insertar más clientes de prueba (INSERT)
+-- 1. Insertar mÃ¡s clientes de prueba (INSERT)
 INSERT INTO Clientes (nombre, saldo) VALUES 
 ('Mariana', 350000.00),
 ('Carlos', 50000.00),
@@ -70,28 +70,28 @@ DELETE FROM Transacciones WHERE id_cliente = 7;
 
 
 --JOINS
---3)MOSTRÁ EL NOMBRE DEL CLIENTE JUNTO CON EL MONTO Y LOS DIAS DE SUS PLAZOS FIJOS
+--3)MOSTRÃ EL NOMBRE DEL CLIENTE JUNTO CON EL MONTO Y LOS DIAS DE SUS PLAZOS FIJOS
 SELECT c.nombre,pf.monto,pf.dias,pf.tna FROM Clientes AS c INNER JOIN PlazosFijos AS pf ON c.id_cliente = pf.id_cliente;
 
---4)MOSTRÁ TODOS LOS CLIENTES,TENGAN O NO UN PLAZO FIJO CREADO
+--4)MOSTRÃ TODOS LOS CLIENTES,TENGAN O NO UN PLAZO FIJO CREADO
 SELECT c.nombre,pf.monto,pf.dias,pf.tna FROM Clientes AS c LEFT JOIN PlazosFijos AS pf ON c.id_cliente = pf.id_cliente;
 
 
 --FUNCIONES DE AGRUPACION
---1)OBTENÉ EL TOTAL DEPOSITADO POR TIPO DE TRANSACCIÓN Y CUÁNTAS OPERACIONES SE HICIERON DE CADA UNA.
+--1)OBTENÃ‰ EL TOTAL DEPOSITADO POR TIPO DE TRANSACCIÃ“N Y CUÃNTAS OPERACIONES SE HICIERON DE CADA UNA.
 SELECT tipo,
        COUNT(*) AS cantidad_operaciones,
        SUM(monto) AS total_monto,
        AVG(monto) AS promedio_monto
        FROM Transacciones GROUP BY tipo;
 
---2)Mostra los clientes que tengan más de 1 plazo fijo armado
+--2)Mostra los clientes que tengan mÃ¡s de 1 plazo fijo armado
 SELECT id_cliente, COUNT(*) AS total_plazos_fijos
     FROM PlazosFijos GROUP BY id_cliente HAVING COUNT(*) > 1;
 
 
 --CASE
---1)CLASIFICÁ A LOS CLIENTES SEGÚN SU SALDO DISPONIBLE EN CATEGORIAS DE PERFIL DE INVERSOR
+--1)CLASIFICÃ A LOS CLIENTES SEGÃšN SU SALDO DISPONIBLE EN CATEGORIAS DE PERFIL DE INVERSOR
 SELECT nombre,saldo,
     CASE
         WHEN saldo >= 500000 THEN 'Cliente VIP / Inversor Mayorista'
@@ -120,34 +120,25 @@ FROM PlazosFijos pf
 INNER JOIN Clientes c ON c.id_cliente = pf.id_cliente;
 
 
---2)calcular el saldo acumulado historial transacción por transacción para un cliente
+--2)calcular el saldo acumulado historial transacciÃ³n por transacciÃ³n para un cliente
 SELECT 
     id_transaccion,
     id_cliente,
     fecha,
     tipo,
     monto,
-    -- Suma el monto de la transacción actual con todas las anteriores
+    -- Suma el monto de la transacciÃ³n actual con todas las anteriores
     SUM(CASE WHEN tipo = 'DEPOSITO' THEN monto ELSE -monto END) 
         OVER (PARTITION BY id_cliente ORDER BY fecha, id_transaccion) AS saldo_acumulado
 FROM Transacciones
 WHERE id_cliente = 1;
 
 
---3)Podés mostrar el monto de un plazo fijo y, en la misma fila, compararlo contra el promedio de plazos fijos de todos los clientes, sin necesidad de hacer un JOIN ni subconsulta
+--3)PodÃ©s mostrar el monto de un plazo fijo y, en la misma fila, compararlo contra el promedio de plazos fijos de todos los clientes, sin necesidad de hacer un JOIN ni subconsulta
 SELECT 
     id_plazo_fijo,
     id_cliente,
     monto,
     AVG(monto) OVER () AS promedio_general_sistema,
     monto - AVG(monto) OVER () AS diferencia_con_promedio
-FROM PlazosFijos;
-
-
---4)saber cuánto varió el monto entre un plazo fijo y el anterior del mismo cliente
-SELECT 
-    id_cliente,
-    monto AS monto_actual,
-    LAG(monto, 1, 0) OVER (PARTITION BY id_cliente ORDER BY id_plazo_fijo) AS monto_plazo_fijo_anterior,
-    monto - LAG(monto, 1, 0) OVER (PARTITION BY id_cliente ORDER BY id_plazo_fijo) AS diferencia_con_anterior
 FROM PlazosFijos;
