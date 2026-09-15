@@ -23,6 +23,28 @@ public class Accion extends Inversion{
 	}
 
 	//getters y setters
+	public double getCantidad(){ 
+		return cantidad;
+	}
 
+	public void setCantidad(double cantidad) {
+		this.cantidad = cantidad;
+	}
+
+	public double getPrecioCompra(){
+		return precioCompra;
+	}
+
+	public void setPrecioCompra(double precioCompra){
+		this.precioCompra = precioCompra;
+	}
+
+	public double getPrecioActual() { 
+		return precioActual;
+	}
+
+    public void setPrecioActual(double precioActual) {
+		this.precioActual = precioActual;
+	}
 
 }
