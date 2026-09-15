@@ -34,9 +34,7 @@ Este proyecto está enfocado en aplicar Programación Orientada a Objetos avanza
 ## 🗄️ Conceptos Técnicos Aplicados
 
 * **SQL Server & T-SQL (Lógica de Datos Avanzada):**
-  * **Procedimientos Almacenados:** Implementación de `sp_SimularPlazoFijo` para delegar cálculos matemáticos de proyecciones a la base de datos.
   * **Funciones de Ventana (`OVER`):** Uso de `ROW_NUMBER()`, `RANK()` y `DENSE_RANK()` para rankear las inversiones de los clientes, y `SUM() OVER(...)` para calcular saldos históricos acumulados transacción por transacción.
-  * **Analítica Temporal:** Aplicación de la función `LAG()` para calcular la variación económica exacta entre un plazo fijo y el inmediato anterior de un mismo cliente.
 
 * **Java & Backend (Arquitectura y POO):**
   * **Clases Abstractas y Polimorfismo:** Creación de una entidad base `Inversion` con un método abstracto `calcularGanancia()`, permitiendo que el portafolio del cliente procese dinámicamente Plazos Fijos o FCIs en una misma colección.
