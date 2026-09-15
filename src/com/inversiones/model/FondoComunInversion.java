@@ -1,35 +1,41 @@
 package com.inversiones.model;
 
 public class FondoComunInversion extends Inversion {
-    //ATRIBUTOS
-    private double ValorCuotaparteInicial;
-    private double ValorCuotaparteActual;
 
-    //CONSTRUCTOR
-    public FondoComunInversion(double monto,int dias,double ValorCuotaParteInicial,double ValorCuotaparteActual){
-        super(monto,dias);
-        this.ValorCuotaparteInicial = ValorCuotaParteInicial;
-        this.ValorCuotaparteActual = ValorCuotaparteActual;
+    // ATRIBUTOS
+    private double valorCuotaparteInicial;
+    private double valorCuotaparteActual;
+
+    // CONSTRUCTOR
+    public FondoComunInversion(double monto, int dias, double valorCuotaparteInicial, double valorCuotaparteActual) {
+        super(monto, dias);
+        this.valorCuotaparteInicial = valorCuotaparteInicial;
+        this.valorCuotaparteActual = valorCuotaparteActual;
     }
 
-    //METODOS
+    // MÉTODOS
     @Override
-    public double calcularGanancia(){
-        double cuotapartesCompradas = getMonto() / ValorCuotaparteInicial;
+    public double calcularGanancia() {
+        double cuotapartesCompradas = getMonto() / this.valorCuotaparteInicial;
+        double valorActualTotal = cuotapartesCompradas * this.valorCuotaparteActual;
 
-        double ValorActualTotal = cuotapartesCompradas * ValorCuotaparteActual;
-
-        return ValorActualTotal - getMonto();
+        return valorActualTotal - getMonto();
     }
 
-    //GETTERS
-    public double ValorCuotaparteInicial(){
-        return this.ValorCuotaparteInicial;
+    // GETTERS Y SETTERS
+    public double getValorCuotaparteInicial() {
+        return this.valorCuotaparteInicial;
     }
 
-    public double ValorCuotaparteActual(){
-        return this.ValorCuotaparteActual;
+    public void setValorCuotaparteInicial(double valorCuotaparteInicial) {
+        this.valorCuotaparteInicial = valorCuotaparteInicial;
     }
 
+    public double getValorCuotaparteActual() {
+        return this.valorCuotaparteActual;
+    }
 
+    public void setValorCuotaparteActual(double valorCuotaparteActual) {
+        this.valorCuotaparteActual = valorCuotaparteActual;
+    }
 }
