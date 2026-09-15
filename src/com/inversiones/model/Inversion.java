@@ -1,7 +1,7 @@
 package com.inversiones.model;
 
 //CLASE ABSTRACTA
-public abstract class Inversion{
+public abstract class Inversion implements Calculable{
     //ATRIBUTOS
     private double monto;
     private int dias;
@@ -11,6 +11,7 @@ public abstract class Inversion{
         this.monto = monto;
         this.dias = dias;
     }
+
 
     //MÉTODO ABSTRACTO: CADA TIPO DE INVERSION LO VA A CALCULAR A SU MANERA
     public abstract double calcularGanancia();
