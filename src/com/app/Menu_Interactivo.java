@@ -1,5 +1,7 @@
 package com.app;
 
+import com.inversiones.exception.InversionInvalidaException;
+import com.inversiones.exception.SaldoInsuficienteException;
 import com.inversiones.model.Calculable;
 import com.inversiones.model.Cliente;
 import com.inversiones.service.InversionService;
@@ -16,7 +18,7 @@ public class Menu_Interactivo {
         System.out.println("=== SISTEMA DE GESTIÓN DE INVERSIONES ===");
 
         while (continuar) {
-            System.out.println("\n=== CLIENTE: "+ cliente.getNombre() + " | SALDO: " + cliente.getSaldo()+"$"+"===");
+            System.out.println("\n=== CLIENTE: " + cliente.getNombre() + " | SALDO: " + cliente.getSaldo() + "$ ===");
             System.out.println("1. Agregar Plazo fijo\n2. Agregar Accion\n" +
                     "3. Agregar Fondo Común de Inversión\n4. Ver ganancias detalladas\n" +
                     "5. Ver ganancia total acumulada\n6. Salir\nSELECCIONE UNA OPCIÓN: ");
@@ -41,12 +43,12 @@ public class Menu_Interactivo {
                         System.out.print("Ingrese la TNA (Ej: 70.0): ");
                         double tna = scanner.nextDouble();
 
-                        boolean exito = servicio.agregarPlazoFijo(cliente, montoPF, diasPF, tna);
-                        if (exito) {
-                            System.out.println("-> Plazo fijo agendado con éxito.");
-                        } else {
-                            System.out.println(" Error: Saldo insuficiente.");
-                        }
+                        // Invoca al servicio que lanza excepciones de negocio
+                        servicio.agregarPlazoFijo(cliente, montoPF, diasPF, tna);
+                        System.out.println("-> Plazo fijo agendado con éxito.");
+
+                    } catch (SaldoInsuficienteException | InversionInvalidaException e) {
+                        System.out.println(" Error: " + e.getMessage());
                     } catch (InputMismatchException e) {
                         System.out.println("Error en la entrada de datos.");
                         scanner.nextLine();
@@ -69,12 +71,11 @@ public class Menu_Interactivo {
                         System.out.print("Ingrese el precio actual unitario: ");
                         double pActual = scanner.nextDouble();
 
-                        boolean exito = servicio.agregarAccion(cliente, montoAcc, diasAcc, nombre, cantidad, pCompra, pActual);
-                        if (exito) {
-                            System.out.println("-> Acción agregada con éxito.");
-                        } else {
-                            System.out.println(" Error: Saldo insuficiente.");
-                        }
+                        servicio.agregarAccion(cliente, montoAcc, diasAcc, nombre, cantidad, pCompra, pActual);
+                        System.out.println("-> Acción agregada con éxito.");
+
+                    } catch (SaldoInsuficienteException | InversionInvalidaException e) {
+                        System.out.println(" Error: " + e.getMessage());
                     } catch (InputMismatchException e) {
                         System.out.println("Error en la entrada de datos.");
                         scanner.nextLine();
@@ -92,12 +93,11 @@ public class Menu_Interactivo {
                         System.out.print("Ingrese el valor actual de la cuotaparte: ");
                         double cpActual = scanner.nextDouble();
 
-                        boolean exito = servicio.agregarFCI(cliente, montoFCI, diasFCI, cpInicial, cpActual);
-                        if (exito) {
-                            System.out.println("-> FCI agregado con éxito.");
-                        } else {
-                            System.out.println(" Error: Saldo insuficiente.");
-                        }
+                        servicio.agregarFCI(cliente, montoFCI, diasFCI, cpInicial, cpActual);
+                        System.out.println("-> FCI agregado con éxito.");
+
+                    } catch (SaldoInsuficienteException | InversionInvalidaException e) {
+                        System.out.println(" Error: " + e.getMessage());
                     } catch (InputMismatchException e) {
                         System.out.println("Error en la entrada de datos.");
                         scanner.nextLine();
@@ -112,14 +112,13 @@ public class Menu_Interactivo {
                         for (int i = 0; i < servicio.getCartera().size(); i++) {
                             Calculable inv = servicio.getCartera().get(i);
                             String tipo = inv.getClass().getSimpleName();
-                            // Concatenación normal:
                             System.out.println("[" + (i + 1) + "] Tipo: " + tipo + " | Ganancia proyectada: $" + inv.calcularGanancia());
                         }
                     }
                     break;
 
                 case 5:
-                    System.out.println("\n>>> Ganancia total estimada de la cartera: " + servicio.calcularGananciaTotal() + " <<<");
+                    System.out.println("\n>>> Ganancia total estimada de la cartera: $" + servicio.calcularGananciaTotal() + " <<<");
                     break;
 
                 case 6:
@@ -133,8 +132,6 @@ public class Menu_Interactivo {
         }
     }
 }
-
-
 
 
 
