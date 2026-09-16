@@ -6,9 +6,9 @@ Este proyecto aplica **Programación Orientada a Objetos** (Herencia, Polimorfis
 
 ---
 
-## 🎯 Funcionalidades Principales
+## 🏦 Funcionalidades Principales
 
-### 💰 Gestión de Plazos Fijos
+### 💵  Gestión de Plazos Fijos
 * Constituir plazos fijos vinculados a clientes, registrando monto, días y Tasa Nominal Anual (TNA).
 * Cálculo polimórfico de ganancias basadas en la fórmula de interés según los días estipulados.
 
