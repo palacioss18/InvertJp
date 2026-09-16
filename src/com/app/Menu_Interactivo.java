@@ -28,7 +28,7 @@ public class Menu_Interactivo {
                     System.out.print("Ingrese la TNA (Ej: 70.0): ");
                     double tna = scanner.nextDouble();
 
-                    cartera.add(new Plazofijo(montoPF,diasPF,tna));
+                    cartera.add(new PlazoFijo(montoPF,diasPF,tna));
                     System.out.println("Plazo fijo agendado con exitos.");
                     break;
 
