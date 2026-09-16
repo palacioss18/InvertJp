@@ -13,23 +13,21 @@ public class Cliente{
         this.saldo = saldo;
     }
 
-    //GETTERS Y SETTERS
-    public int getId(){
-        return id;
+    //GETTERS
+    public double getSaldo(){
+        return saldo;
     }
 
     public String getNombre(){
         return nombre;
     }
 
-    public double getSaldo(){
-        return saldo;
-    }
-
-    public void setSaldo(double saldo){
-        if(saldo > 0){
-            this.saldo = saldo;
+    public boolean descontarSaldo(double monto) {
+        if (monto <= saldo) {
+            saldo -= monto;
+            return true;
         }
+        return false; // Saldo insuficiente
     }
 
 }
