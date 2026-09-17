@@ -79,8 +79,6 @@ CREATE TABLE FondosComunesInversion (
 );
 GO
 
-
-GO
 -- Cargar catálogo de tipos
 INSERT INTO TiposInversion (codigo, descripcion) VALUES 
 ('PLAZO_FIJO', 'Plazo Fijo Tradicional'),
@@ -90,17 +88,53 @@ INSERT INTO TiposInversion (codigo, descripcion) VALUES
 -- Cargar Cliente
 INSERT INTO Clientes (nombre, email, saldo, perfil_riesgo) VALUES 
 ('Jose Palacios', 'jose@email.com', 500000.00, 'MODERADO');
+GO
+
+-- Inserciones seguras usando Variables para capturar el ID
+BEGIN TRANSACTION;
+
+DECLARE @id_pf INT, @id_accion INT, @id_fci INT;
 
 -- 1. Insertar Plazo Fijo
-INSERT INTO Transacciones (cliente_id, tipo_id, monto_invertido, dias) VALUES (1, 1, 100000.00, 30);
-INSERT INTO PlazosFijos (inversion_id, tna) VALUES (SCOPE_IDENTITY(), 70.00);
+INSERT INTO Transacciones (cliente_id, tipo_id, monto_invertido, dias) 
+VALUES (1, 1, 100000.00, 30);
+SET @id_pf = SCOPE_IDENTITY();
+
+INSERT INTO PlazosFijos (inversion_id, tna) 
+VALUES (@id_pf, 70.00);
 
 -- 2. Insertar Acción
-INSERT INTO Transacciones (cliente_id, tipo_id, monto_invertido, dias) VALUES (1, 2, 50000.00, 60);
+INSERT INTO Transacciones (cliente_id, tipo_id, monto_invertido, dias) 
+VALUES (1, 2, 50000.00, 60);
+SET @id_accion = SCOPE_IDENTITY();
+
 INSERT INTO Acciones (inversion_id, ticker, cantidad, precio_compra, precio_actual) 
-VALUES (SCOPE_IDENTITY(), 'YPF', 10.0, 5000.00, 6200.00);
+VALUES (@id_accion, 'YPF', 10.0, 5000.00, 6200.00);
 
 -- 3. Insertar FCI
-INSERT INTO Transacciones (cliente_id, tipo_id, monto_invertido, dias) VALUES (1, 3, 30000.00, 30);
+INSERT INTO Transacciones (cliente_id, tipo_id, monto_invertido, dias) 
+VALUES (1, 3, 30000.00, 30);
+SET @id_fci = SCOPE_IDENTITY();
+
 INSERT INTO FondosComunesInversion (inversion_id, nombre_fondo, valor_cuotaparte_inicial, valor_cuotaparte_actual) 
-VALUES (SCOPE_IDENTITY(), 'Fondo Balanceado AR', 100.00, 115.00);
+VALUES (@id_fci, 'Fondo Balanceado AR', 100.00, 115.00);
+
+COMMIT TRANSACTION;
+GO
+
+
+BEGIN TRY
+    BEGIN TRANSACTION;
+
+    UPDATE Clientes SET saldo = saldo - 100000.00 WHERE cliente_id = 1;
+
+    INSERT INTO Transacciones(cliente_id,tipo_id,monto_invertido,dias) VALUES (1,1,100000.00,30);
+
+    INSERT INTO PlazosFijos (inversion_id,tna) VALUES (SCOPE_IDENTITY(),70.00);
+
+    COMMIT TRANSACTION;
+END TRY
+BEGIN CATCH
+    ROLLBACK TRANSACTION;
+    PRINT 'Error al registrar la inversion: ' + ERROR_MESSAGE();
+END CATCH;
