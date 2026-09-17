@@ -1,24 +1,26 @@
 package com.inversiones.model;
 
-public class Cliente{
-    //ATRIBUTOS PRIVADO
+public class Cliente {
     private int id;
     private String nombre;
     private double saldo;
 
-    //CONSTRUCTOR
-    public Cliente(int id,String nombre,double saldo){
+    public Cliente(int id, String nombre, double saldo) {
         this.id = id;
         this.nombre = nombre;
         this.saldo = saldo;
     }
 
-    //GETTERS
-    public double getSaldo(){
+    // Agregar este Getter
+    public int getId() {
+        return id;
+    }
+
+    public double getSaldo() {
         return saldo;
     }
 
-    public String getNombre(){
+    public String getNombre() {
         return nombre;
     }
 
@@ -27,11 +29,9 @@ public class Cliente{
             saldo -= monto;
             return true;
         }
-        return false; // Saldo insuficiente
+        return false;
     }
-
 }
-
 
 
 

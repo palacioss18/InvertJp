@@ -6,7 +6,9 @@ import com.inversiones.model.Calculable;
 import com.inversiones.model.Cliente;
 import com.inversiones.service.InversionService;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
+import com.inversiones.model.Transaccion;
 
 public class Menu_Interactivo {
     private final InversionService servicio = new InversionService();
@@ -21,7 +23,7 @@ public class Menu_Interactivo {
             System.out.println("\n=== CLIENTE: " + cliente.getNombre() + " | SALDO: " + cliente.getSaldo() + "$ ===");
             System.out.println("1. Agregar Plazo fijo\n2. Agregar Accion\n" +
                     "3. Agregar Fondo Común de Inversión\n4. Ver ganancias detalladas\n" +
-                    "5. Ver ganancia total acumulada\n6. Salir\nSELECCIONE UNA OPCIÓN: ");
+                    "5. Ver ganancia total acumulada\n6. Ver Transacciones\n7. Salir\nSELECCIONE UNA OPCIÓN: ");
 
             int opcion;
             try {
@@ -122,6 +124,19 @@ public class Menu_Interactivo {
                     break;
 
                 case 6:
+                    List<Transaccion> historial = servicio.obtenerHistorialCliente(cliente.getId());
+                    if(historial.isEmpty()){
+                        System.out.println("No hay transacciones registradas para este cliente.");
+                    }
+                    else{
+                        System.out.println("\n-- HISTORIAL DE TRANSACCIONES (ID Cliente: "+cliente.getId()+") --");
+                        for(Transaccion t : historial){
+                            System.out.println(t);
+                        }
+                    }
+                    break;
+
+                case 7:
                     continuar = false;
                     System.out.println("Saliendo del sistema...");
                     break;
