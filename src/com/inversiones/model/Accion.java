@@ -22,18 +22,13 @@ public class Accion extends Inversion{
 		return cantidad * (precioActual - precioCompra);
 	}
 
+
 	//getters y setters
-	public double getCantidad(){ 
-		return cantidad;
-	}
+	public double getCantidad(){return cantidad;}
 
-	public void setCantidad(double cantidad) {
-		this.cantidad = cantidad;
-	}
+	public void setCantidad(double cantidad) {this.cantidad = cantidad;}
 
-	public double getPrecioCompra(){
-		return precioCompra;
-	}
+	public double getPrecioCompra(){return precioCompra;}
 
 	public void setPrecioCompra(double precioCompra){
 		this.precioCompra = precioCompra;
@@ -47,4 +42,5 @@ public class Accion extends Inversion{
 		this.precioActual = precioActual;
 	}
 
+	public String getNombre(){return nombre;}
 }

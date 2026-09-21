@@ -82,4 +82,23 @@ public class InversionService {
         }
         return total;
     }
+
+
+    public void venderAccion(Cliente cliente, Accion accion) throws InversionInvalidaException {
+        if (!cartera.contains(accion)) {
+            throw new InversionInvalidaException("La acción no pertenece a la cartera actual.");
+        }
+
+        // 1. Calculamos el total recibido por la venta
+        double montoRecibido = accion.getCantidad() * accion.getPrecioActual();
+
+        // 2. Acreditamos el saldo al cliente
+        cliente.setSaldo(cliente.getSaldo() + montoRecibido);
+
+        // 3. Quitamos la acción de la cartera
+        cartera.remove(accion);
+
+        // 4. Registramos la transacción
+        registrarTransaccion(cliente.getId(), montoRecibido, "VENTA_ACCION");
+    }
 }

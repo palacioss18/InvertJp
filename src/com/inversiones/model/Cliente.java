@@ -31,6 +31,10 @@ public class Cliente {
         }
         return false;
     }
+
+    public void setSaldo(double v) {
+        this.saldo = v;
+    }
 }
 
 
