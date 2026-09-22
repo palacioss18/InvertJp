@@ -22,8 +22,13 @@ public class Menu_Interactivo {
         while (continuar) {
             System.out.println("\n=== CLIENTE: " + cliente.getNombre() + " | SALDO: " + cliente.getSaldo() + "$ ===");
             System.out.println("1. Agregar Plazo fijo\n2. Agregar Accion\n" +
-                    "3. Agregar Fondo Común de Inversión\n4. Ver ganancias detalladas\n" +
-                    "5. Ver ganancia total acumulada\n6. Ver Transacciones\n7. Salir\nSELECCIONE UNA OPCIÓN: ");
+                              "3. Agregar Fondo Común de Inversión\n" +
+                              "4. Ver ganancias detalladas\n" +
+                              "5. Ver ganancia total acumulada\n" +
+                              "6. Ver Transacciones\n" +
+                              "7.Vender Acción\n" +
+                              "8.Rescatar FCI\n" +
+                              "9. Salir\nSELECCIONE UNA OPCIÓN: ");
 
             int opcion;
             try {
