@@ -1,5 +1,6 @@
 package com.inversiones.service;
 
+import com.inversiones.enums.TipoOperacion;
 import com.inversiones.exception.InversionInvalidaException;
 import com.inversiones.exception.SaldoInsuficienteException;
 import com.inversiones.model.*;
@@ -15,7 +16,7 @@ public class InversionService {
     private final Map<Integer, List<Transaccion>> historialTransacciones = new HashMap<>();
     private int contadorTransacciones = 1;
 
-    private void registrarTransaccion(int clienteId, double monto, String tipo) {
+    private void registrarTransaccion(int clienteId, double monto, TipoOperacion tipo) {
         // computeIfAbsent crea la lista vacía si es la primera vez que opera el cliente
         historialTransacciones.computeIfAbsent(clienteId, k -> new ArrayList<>())
                 .add(new Transaccion(contadorTransacciones++, monto, tipo));
@@ -33,7 +34,7 @@ public class InversionService {
         cartera.add(new PlazoFijo(monto, dias, tna));
 
         // Registramos la transacción en el historial del cliente
-        registrarTransaccion(cliente.getId(), monto, "PLAZO_FIJO");
+        registrarTransaccion(cliente.getId(), monto, TipoOperacion.PLAZO_FIJO);
     }
 
     public void agregarAccion(Cliente cliente, double monto, int dias, String nombre, double cantidad, double pCompra, double pActual)
@@ -48,7 +49,7 @@ public class InversionService {
         cartera.add(new Accion(monto, dias, nombre, cantidad, pCompra, pActual));
 
         // Registramos la transacción en el historial del cliente
-        registrarTransaccion(cliente.getId(), monto, "ACCION");
+        registrarTransaccion(cliente.getId(), monto, TipoOperacion.ACCION);
     }
 
     public void agregarFCI(Cliente cliente, double monto, int dias, double cpInicial, double cpActual)
@@ -63,7 +64,7 @@ public class InversionService {
         cartera.add(new FondoComunInversion(monto, dias, cpInicial, cpActual));
 
         // Registramos la transacción en el historial del cliente
-        registrarTransaccion(cliente.getId(), monto, "FCI");
+        registrarTransaccion(cliente.getId(), monto, TipoOperacion.FCI);
     }
 
     // Devuelve el historial de un cliente o una lista vacía si no tiene transacciones
@@ -84,21 +85,43 @@ public class InversionService {
     }
 
 
-    public void venderAccion(Cliente cliente, Accion accion) throws InversionInvalidaException {
-        if (!cartera.contains(accion)) {
-            throw new InversionInvalidaException("La acción no pertenece a la cartera actual.");
+    public void venderAccion(Cliente cliente, int indice) throws InversionInvalidaException {
+        if (indice < 0 || indice >= cartera.size()) {
+            throw new InversionInvalidaException("Índice de inversión inválido.");
         }
 
-        // 1. Calculamos el total recibido por la venta
-        double montoRecibido = accion.getCantidad() * accion.getPrecioActual();
+        Calculable item = cartera.get(indice);
+        if (!(item instanceof Accion)) {
+            throw new InversionInvalidaException("La inversión seleccionada no es una Acción.");
+        }
 
-        // 2. Acreditamos el saldo al cliente
-        cliente.setSaldo(cliente.getSaldo() + montoRecibido);
+        Accion accion = (Accion) item;
+        // Total devuelto: Capital original invertido (monto) + Ganancia/Pérdida realizada
+        double montoVenta = (accion.getCantidad() * accion.getPrecioActual());
 
-        // 3. Quitamos la acción de la cartera
-        cartera.remove(accion);
+        cliente.acreditarSaldo(montoVenta);
+        cartera.remove(indice);
 
-        // 4. Registramos la transacción
-        registrarTransaccion(cliente.getId(), montoRecibido, "VENTA_ACCION");
+        registrarTransaccion(cliente.getId(), montoVenta, TipoOperacion.VENTA_ACCION);
+    }
+
+    public void rescatarFCI(Cliente cliente, int indice) throws InversionInvalidaException {
+        if (indice < 0 || indice >= cartera.size()) {
+            throw new InversionInvalidaException("Índice de inversión inválido.");
+        }
+
+        Calculable item = cartera.get(indice);
+        if (!(item instanceof FondoComunInversion)) {
+            throw new InversionInvalidaException("La inversión seleccionada no es un Fondo Común de Inversión.");
+        }
+
+        FondoComunInversion fci = (FondoComunInversion) item;
+        // Total devuelto: Monto inicial + Ganancia/Pérdida
+        double montoRescate = fci.getMonto() + fci.calcularGanancia();
+
+        cliente.acreditarSaldo(montoRescate);
+        cartera.remove(indice);
+
+        registrarTransaccion(cliente.getId(), montoRescate, TipoOperacion.RESCATE_FCI);
     }
 }

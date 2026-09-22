@@ -1,5 +1,7 @@
 package com.inversiones.model;
 
+import com.inversiones.enums.TipoOperacion;
+
 import java.time.LocalDateTime;
 
 public class Transaccion {
@@ -7,10 +9,10 @@ public class Transaccion {
     private int idTransaccion;
     private LocalDateTime fecha;
     private double monto;
-    private String tipoOperacion;
+    private TipoOperacion tipoOperacion;
 
     //CONTRUCTOR
-    public Transaccion(int idTransaccion,double monto,String tipoOperacion){
+    public Transaccion(int idTransaccion,double monto,TipoOperacion tipoOperacion){
         this.idTransaccion = idTransaccion;
         this.fecha = LocalDateTime.now();
         this.monto = monto;
@@ -30,7 +32,7 @@ public class Transaccion {
         return this.monto;
     }
 
-    public String getTipoOperacion(){
+    public TipoOperacion getTipoOperacion(){
         return tipoOperacion;
     }
 

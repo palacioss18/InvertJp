@@ -137,6 +137,56 @@ public class Menu_Interactivo {
                     break;
 
                 case 7:
+                    try {
+                        if (servicio.getCartera().isEmpty()) {
+                            System.out.println("No hay inversiones en la cartera para vender.");
+                            break;
+                        }
+                        System.out.println("\n--- INVERSIONES DISPONIBLES ---");
+                        for (int i = 0; i < servicio.getCartera().size(); i++) {
+                            Calculable inv = servicio.getCartera().get(i);
+                            System.out.println("[" + (i + 1) + "] " + inv.getClass().getSimpleName());
+                        }
+                        System.out.print("Ingrese el número de la acción a vender: ");
+                        int numVenta = scanner.nextInt() - 1;
+
+                        servicio.venderAccion(cliente, numVenta);
+                        System.out.println("-> Acción vendida con éxito. Capital acreditado a su saldo.");
+
+                    } catch (InversionInvalidaException e) {
+                        System.out.println(" Error: " + e.getMessage());
+                    } catch (InputMismatchException e) {
+                        System.out.println("Error: Ingrese un índice válido.");
+                        scanner.nextLine();
+                    }
+                    break;
+
+                case 8:
+                    try {
+                        if (servicio.getCartera().isEmpty()) {
+                            System.out.println("No hay inversiones en la cartera para rescatar.");
+                            break;
+                        }
+                        System.out.println("\n--- INVERSIONES DISPONIBLES ---");
+                        for (int i = 0; i < servicio.getCartera().size(); i++) {
+                            Calculable inv = servicio.getCartera().get(i);
+                            System.out.println("[" + (i + 1) + "] " + inv.getClass().getSimpleName());
+                        }
+                        System.out.print("Ingrese el número del FCI a rescatar: ");
+                        int numRescate = scanner.nextInt() - 1;
+
+                        servicio.rescatarFCI(cliente, numRescate);
+                        System.out.println("-> FCI rescatado con éxito. Capital + rendimientos acreditados a su saldo.");
+
+                    } catch (InversionInvalidaException e) {
+                        System.out.println(" Error: " + e.getMessage());
+                    } catch (InputMismatchException e) {
+                        System.out.println("Error: Ingrese un índice válido.");
+                        scanner.nextLine();
+                    }
+                    break;
+
+                case 9:
                     continuar = false;
                     System.out.println("Saliendo del sistema...");
                     break;
