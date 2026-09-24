@@ -59,13 +59,21 @@ investment-management-system/
         │   └── Menu_Interactivo.java
         │
         └── inversiones/
+            ├── enums
+            |   └──TipoOperacion.enum
+            |
+            ├── exception/      # Capa para manejar excepciones especificas
+            |   ├──inversionInvalidaException
+            |   └──SaldoInsuficienteException
+            |
             ├── model/          # Capa de Dominio (Modelos de datos y Polimorfismo)
             │   ├── Accion.java
             │   ├── Calculable.java
             │   ├── Cliente.java
             │   ├── FondoComunInversion.java
             │   ├── Inversion.java
-            │   └── PlazoFijo.java
+            |   ├── PlazoFijo.java
+            │   └── Transaccion.java
             │
             └── service/        # Capa de Servicios (Lógica del Negocio)
                 └── InversionService.java
