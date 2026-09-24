@@ -42,7 +42,7 @@ Este proyecto aplica **Programación Orientada a Objetos** (Herencia, Polimorfis
 ## 📁 Estructura del Proyecto
 
 ```text
-investment-management-system/
+InvertJp/
 │
 ├── database
 │
