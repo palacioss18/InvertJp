@@ -42,9 +42,6 @@ Este proyecto aplica **Programación Orientada a Objetos** (Herencia, Polimorfis
   * **Clases Abstractas, Interfaces y Polimorfismo:** Uso de la interfaz `Calculable` y clase base `Inversion`, permitiendo procesar dinámicamente Plazos Fijos, Acciones y FCIs dentro de un mismo portafolio.
   * **Encapsulamiento:** Control de acceso a atributos mediante modificadores `private`, metodos mutadores (`getters/setters`) y actualización del saldo operativo del `Cliente`.
 
-* **SQL Server & T-SQL (Lógica de Datos Avanzada):**
-  * **Funciones de Ventana (`OVER`):** Uso de `ROW_NUMBER()`, `RANK()` y `DENSE_RANK()` para clasificar inversiones, y `SUM() OVER(...)` para calcular saldos acumulados transacción por transacción.
-
 ---
 
 ## 📁 Estructura del Proyecto
@@ -52,9 +49,7 @@ Este proyecto aplica **Programación Orientada a Objetos** (Herencia, Polimorfis
 ```text
 investment-management-system/
 │
-├── database/
-│   ├── schema_and_data.sql     # Definición de tablas (Clientes, PlazosFijos, Transacciones), FKs e inserts
-│   └── stored_procedures.sql   # SP para simulación de cálculos financieros
+├── database
 │
 └── src/
     └── com/
