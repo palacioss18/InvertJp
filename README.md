@@ -19,11 +19,6 @@ Este proyecto aplica **Programación Orientada a Objetos** (Herencia, Polimorfis
 ### 💳 Control de Saldo Dinámico
 * Validación defensiva en tiempo de ejecución: el sistema descuenta automáticamente el dinero del saldo disponible del cliente y bloquea operaciones si el saldo es insuficiente.
 
-### 📊 Simulación de Rendimientos vía Base de Datos
-* Proyecciones finales e intereses a percibir mediante la ejecución de Procedimientos Almacenados (`sp_SimularPlazoFijo`) directamente en SQL Server.
-
-### 🗄️ Auditoría de Transacciones y Saldos
-* Registro histórico de operaciones de depósitos y retiros por cliente para control de auditoría.
 
 ---
 
